@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>📁 File Upload By Aman</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background Particles */
+        .particle {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.3;
+            animation: float 20s infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+            33% { transform: translateY(-100px) translateX(100px) rotate(120deg); }
+            66% { transform: translateY(-50px) translateX(-100px) rotate(240deg); }
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: slideDown 1s ease-out;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            font-weight: 800;
+            animation: glow 2s ease-in-out infinite;
+        }
+        @keyframes glow {
+            0%, 100% { text-shadow: 3px 3px 6px rgba(0,0,0,0.3); }
+            50% { text-shadow: 0 0 20px rgba(255,255,255,0.8), 3px 3px 6px rgba(0,0,0,0.3); }
+        }
+        
+        /* Notice Section */
+        .notice-box {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border: 3px solid rgba(255,255,255,0.3);
+            animation: pulse 3s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        .notice-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .notice-title {
+            color: white;
+            font-size: 2em;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: blink 2s infinite;
+            position: relative;
+            z-index: 1;
+        }
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.7; }
+        }
+        
+        .notice-content {
+            color: white;
+            font-size: 1.2em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .price-tag {
+            display: inline-block;
+            background: white;
+            color: #ff6b6b;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 1.8em;
+            font-weight: 900;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: bounce 2s infinite;
+            position: relative;
+            z-index: 1;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .payment-section {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .payment-link {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.3em;
+            font-weight: 700;
+            margin: 15px 0;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .payment-link::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.2);
+            transition: all 0.5s;
+            transform: translate(-50%, -50%);
+        }
+        .payment-link:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        .payment-link:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+        
+        .warning-text {
+            background: rgba(255,255,255,0.95);
+            color: #ff6b6b;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-top: 15px;
+            border: 2px solid #ff6b6b;
+            animation: shake 3s infinite;
+            position: relative;
+            z-index: 1;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent, rgba(102, 126, 234, 0.1));
+            transition: all 0.5s;
+        }
+        .stat-card:hover::before {
+            top: 0;
+        }
+        .stat-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 15px 45px rgba(0,0,0,0.2);
+        }
+        
+        .stat-number {
+            font-size: 3em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .upload-section {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 45px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+        
+        .drop-zone {
+            border: 3px dashed #667eea;
+            border-radius: 20px;
+            padding: 60px 30px;
+            text-align: center;
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        .drop-zone::after {
+            content: '📎';
+            position: absolute;
+            font-size: 15em;
+            opacity: 0.05;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            pointer-events: none;
+        }
+        .drop-zone.dragover {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-color: #4CAF50;
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(76, 175, 80, 0.4);
+        }
+        .drop-zone:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+        }
+        
+        .drop-zone-icon { 
+            font-size: 5em; 
+            margin-bottom: 20px;
+            animation: floatIcon 3s ease-in-out infinite;
+            display: inline-block;
+        }
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(10deg); }
+        }
+        
+        /* Upload Progress */
+        .upload-progress {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .upload-progress.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            height: 30px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            width: 0%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .upload-status {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        /* Success/Error Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 9999;
+            animation: fadeIn 0.3s;
+        }
+        .modal-overlay.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            animation: popIn 0.3s ease-out;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .modal-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: scaleIn 0.5s ease-out 0.2s both;
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0) rotate(-180deg); }
+            to { transform: scale(1) rotate(0deg); }
+        }
+        
+        .modal.success .modal-icon {
+            color: #4CAF50;
+        }
+        .modal.error .modal-icon {
+            color: #f44336;
+        }
+        
+        .modal-title {
+            font-size: 2em;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .modal-message {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .modal-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .modal-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .file-preview {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            text-align: left;
+            animation: slideIn 0.3s;
+        }
+        .file-preview.show {
+            display: block;
+        }
+        .file-preview-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+            background: #f8f9ff;
+            border-radius: 8px;
+        }
+        .file-icon {
+            font-size: 2.5em;
+        }
+        
+        input[type="file"] { display: none; }
+        .form-group { 
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1em;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+        textarea { resize: vertical; min-height: 100px; }
+        
+        .button-group { 
+            display: flex; 
+            gap: 15px; 
+            margin-top: 30px;
+        }
+        button {
+            flex: 1;
+            padding: 18px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transition: all 0.5s;
+            transform: translate(-50%, -50%);
+        }
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        button:disabled::before {
+            display: none;
+        }
+        
+        .btn-upload {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.3);
+        }
+        .btn-upload:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(76, 175, 80, 0.4);
+        }
+        .btn-clear {
+            background: linear-gradient(135deg, #f44336 0%, #e53935 100%);
+            color: white;
+            box-shadow: 0 5px 20px rgba(244, 67, 54, 0.3);
+        }
+        .btn-clear:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(244, 67, 54, 0.4);
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .gallery-section {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            animation: fadeInUp 1s ease-out 0.9s both;
+        }
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .gallery-header h2 {
+            font-size: 2em;
+            color: #333;
+        }
+        .search-box {
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            width: 300px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .gallery-item {
+            background: #f8f9ff;
+            border-radius: 18px;
+            padding: 18px;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .gallery-item:hover {
+            transform: translateY(-10px) rotate(1deg);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.25);
+            border-color: #667eea;
+        }
+        .gallery-item-icon {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #e8eaff 0%, #f0f2ff 100%);
+            border-radius: 12px;
+            font-size: 5em;
+            margin-bottom: 15px;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        .gallery-item-info {
+            font-size: 0.9em;
+        }
+        .gallery-item-info strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+            color: #333;
+        }
+        .info-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px 0;
+            color: #666;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: white;
+            padding: 25px 35px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 1000;
+            animation: slideInRight 0.3s;
+        }
+        @keyframes slideInRight {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .toast.show { display: block; }
+        .toast.success { border-left: 6px solid #4CAF50; }
+        .toast.error { border-left: 6px solid #f44336; }
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; }
+            .notice-title { font-size: 1.5em; }
+            .notice-content { font-size: 1em; }
+            .upload-section { padding: 25px; }
+            .drop-zone { padding: 40px 20px; }
+            .button-group { flex-direction: column; }
+            .search-box { width: 100%; }
+            .gallery-header { flex-direction: column; align-items: stretch; }
+        }
+        .o1 {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .o2 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .o2 h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .o2 p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        thead th {
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+            transform: scale(1.01);
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody td {
+            padding: 18px 20px;
+            color: #495057;
+        }
+
+        .o3 {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 16px;
+            width: 80px;
+        }
+
+        .o4 {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .o5 {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .o2 h1 {
+                font-size: 24px;
+            }
+            
+            tbody td, thead th {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Particles -->
+    <div id="particles"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>📁 File Uploader by Aman</h1>
+            
+            <div class="notice-box">
+                <div class="notice-title">⚠️ Important Notice</div>
+                <div class="notice-content">
+                    <p>📢 Sobai ke janano jachhe je agami budbar amder sir center a amder sathe dekha korte asbe!</p>
+                    <p>🎁 Amra koiakjon thik korechi sir ke ata gift hisabe photo frame debo</p>
+                    <p>📸 Tomra ajker moddhei sobar akta valo photo akhane upload kore dao nahole kintu tomder photo asbe na</p>
+                    <p>⏰ Tai tomra deri koro na!</p>
+                </div>
+                
+                <div class="payment-section">
+                    <p style="color: white; font-size: 1.2em; margin-bottom: 10px;">💰 Payment Amount:</p>
+                    <div class="price-tag">₹ 50 /-</div>
+                    
+                    <p style="color: white; font-size: 1.1em; margin: 20px 0 10px;">💳 Pay via GPay or PhonePe to Sujoy da</p>
+                    <a class="payment-link" href="upi://pay?pa=sujoydebnath0412@okhdfcbank&pn=Suujoy&aid=uGICAgMCc0c2xRQ">
+                        📱 Click to Pay: sujoydebnath0412@okhdfcbank
+                    </a>
+                    
+                    <div class="warning-text">
+                        ⚡ Sobai 1 taka Patiye Confirm kore Nebe
+                    </div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 20px; font-size: 1.2em;">Upload ANY file - No Limits! ✨</p>
+        </div>
+        
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-number" id="totalFiles">0</div>
+                <div>📁 Total Files</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalFolders">0</div>
+                <div>📂 Folders</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalSystems">0</div>
+                <div>💻 Systems</div>
+            </div>
+        </div>
+        
+        <div class="upload-section">
+            <form id="uploadForm">
+                <div class="drop-zone" id="dropZone">
+                    <div class="drop-zone-icon">📎</div>
+                    <div style="font-size: 1.3em; font-weight: 600; margin-bottom: 10px;">
+                        Click or Drag & Drop ANY file here
+                    </div>
+                    <div style="color: #999; margin-top: 10px;">All types • No limits!</div>
+                    <input type="file" id="fileInput" name="file" required>
+                </div>
+                
+                <div class="file-preview" id="filePreview">
+                    <div class="file-preview-item" id="filePreviewItem"></div>
+                </div>
+                
+                <div class="upload-progress" id="uploadProgress">
+                    <div class="upload-status" id="uploadStatus">Uploading...</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progressBar">0%</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>📝 Your Name</label>
+                    <input type="text" id="foldername" name="foldername" placeholder="Ex. Aman" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>💬 Description (Optional)</label>
+                    <textarea id="description" name="description" placeholder="Add details about your photo..."></textarea>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit" class="btn-upload" id="uploadBtn">
+                        🚀 Upload File
+                    </button>
+                    <button type="button" class="btn-clear" onclick="clearForm()">
+                        🗑️ Clear
+                    </button>
+                </div>
+            </form>
+            <br />
+            <br />
+    <div class="o1">
+        <div class="o2">
+            <h1>Uploaded</h1>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Name</th>
+                    <th>Photos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="o3">1</td>
+                    <td class="o4">Biplop</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">2</td>
+                    <td class="o4">Suujoy</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">3</td>
+                    <td class="o4">Rakhi</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">4</td>
+                    <td class="o4">Sumit</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td class="o3">5</td>
+                    <td class="o4">Nabamita</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">6</td>
+                    <td class="o4">Sneha Das</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">7</td>
+                    <td class="o4">Anusha Sinha</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">8</td>
+                    <td class="o4">Shreyashi</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">9</td>
+                    <td class="o4">Puja</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">10</td>
+                    <td class="o4">Sujata</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">11</td>
+                    <td class="o4">Piyali</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">12</td>
+                    <td class="o4">Ripan</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">13</td>
+                    <td class="o4">Zuyena</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">14</td>
+                    <td class="o4">Sima</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">15</td>
+                    <td class="o4">Santonu</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">16</td>
+                    <td class="o4">AvijitSir</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">17</td>
+                    <td class="o4">Tiyasa</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">18</td>
+                    <td class="o4">Priti</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">19</td>
+                    <td class="o4">Rimpa</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">20</td>
+                    <td class="o4">Aman</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td class="o3">21</td>
+                    <td class="o4">Joyshree</td>
+                    <td>1</td>
+                </tr
+            </tbody>
+        </table>
+        
+        <div class="o5">
+            Total Members: 21
+        </div>
+    </div>
+        </div>
+        
+        <div class="gallery-section">
+            <div class="gallery-header">
+                <h2>📂 All Files</h2>
+                <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search files...">
+            </div>
+            <div class="gallery-grid" id="galleryGrid">
+                <p style="text-align: center;">Loading...</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success/Error Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modal">
+            <div class="modal-icon" id="modalIcon"></div>
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-message" id="modalMessage"></div>
+            <button class="modal-button" onclick="closeModal()">OK</button>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast">
+        <div id="toastMessage"></div>
+    </div>
+
+    <script>
+        // Create animated background particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 100 + 50 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.background = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.3)`;
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = Math.random() * 20 + 10 + 's';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+        
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const filePreview = document.getElementById('filePreview');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const uploadProgress = document.getElementById('uploadProgress');
+        const progressBar = document.getElementById('progressBar');
+        const uploadStatus = document.getElementById('uploadStatus');
+        let allFiles = [];
+        
+        dropZone.onclick = () => fileInput.click();
+        
+        fileInput.onchange = () => {
+            if (fileInput.files.length) {
+                showFilePreview(fileInput.files[0]);
+            }
+        };
+        
+        dropZone.ondragover = (e) => { 
+            e.preventDefault(); 
+            dropZone.classList.add('dragover');
+        };
+        
+        dropZone.ondragleave = () => { 
+            dropZone.classList.remove('dragover');
+        };
+        
+        dropZone.ondrop = (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                showFilePreview(e.dataTransfer.files[0]);
+            }
+        };
+        
+        function showFilePreview(file) {
+            const icon = getFileIcon(file.name);
+            const size = formatFileSize(file.size);
+            
+            document.getElementById('filePreviewItem').innerHTML = `
+                <div class="file-icon">${icon}</div>
+                <div>
+                    <strong>${escapeHtml(file.name)}</strong><br>
+                    <span style="color: #999;">Size: ${size}</span>
+                </div>
+            `;
+            filePreview.classList.add('show');
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function getFileIcon(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const icons = {
+                'jpg': '🖼️', 'jpeg': '🖼️', 'png': '🖼️', 'gif': '🖼️', 'webp': '🖼️',
+                'pdf': '📄', 'doc': '📝', 'docx': '📝', 'txt': '📝',
+                'xls': '📊', 'xlsx': '📊', 'csv': '📊',
+                'ppt': '📊', 'pptx': '📊',
+                'zip': '🗜️', 'rar': '🗜️', '7z': '🗜️',
+                'mp4': '🎥', 'avi': '🎥', 'mov': '🎥', 'mkv': '🎥',
+                'mp3': '🎵', 'wav': '🎵', 'flac': '🎵'
+            };
+            return icons[ext] || '📎';
+        }
+        
+        function formatFileSize(bytes) {
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            if (bytes === 0) return '0 B';
+            const i = Math.floor(Math.log(bytes) / Math.log(1024));
+            return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
+        }
+        
+        function clearForm() {
+            document.getElementById('uploadForm').reset();
+            filePreview.classList.remove('show');
+            uploadProgress.classList.remove('show');
+            progressBar.style.width = '0%';
+            progressBar.textContent = '0%';
+        }
+        
+        function showModal(type, title, message) {
+            const modal = document.getElementById('modal');
+            const overlay = document.getElementById('modalOverlay');
+            const icon = document.getElementById('modalIcon');
+            
+            modal.className = 'modal ' + type;
+            overlay.classList.add('show');
+            
+            if (type === 'success') {
+                icon.textContent = '✅';
+                document.getElementById('modalTitle').textContent = title || 'Upload Successful!';
+                createConfetti();
+            } else {
+                icon.textContent = '❌';
+                document.getElementById('modalTitle').textContent = title || 'Upload Failed!';
+            }
+            
+            document.getElementById('modalMessage').textContent = message;
+            
+            // Auto close after 3 seconds for success
+            if (type === 'success') {
+                setTimeout(closeModal, 3000);
+            }
+        }
+        
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('show');
+        }
+        
+        // Close modal on overlay click
+        document.getElementById('modalOverlay').onclick = (e) => {
+            if (e.target.id === 'modalOverlay') closeModal();
+        };
+        
+        document.getElementById('uploadForm').onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            uploadBtn.disabled = true;
+            uploadBtn.innerHTML = '⏳ Uploading<span class="loading"></span>';
+            
+            // Show progress bar
+            uploadProgress.classList.add('show');
+            uploadStatus.textContent = 'Uploading your file...';
+            
+            // Simulate progress animation
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                if (progress < 90) {
+                    progress += Math.random() * 10;
+                    if (progress > 90) progress = 90;
+                    progressBar.style.width = progress + '%';
+                    progressBar.textContent = Math.round(progress) + '%';
+                }
+            }, 200);
+            
+            try {
+                const res = await fetch('/upload', { method: 'POST', body: formData });
+                const data = await res.json();
+                
+                clearInterval(progressInterval);
+                
+                if (res.ok) {
+                    // Complete progress
+                    progressBar.style.width = '100%';
+                    progressBar.textContent = '100%';
+                    uploadStatus.textContent = 'Upload complete! ✅';
+                    
+                    // Show success modal
+                    setTimeout(() => {
+                        showModal('success', 
+                            '🎉 Upload Successful!', 
+                            `File "${data.filename}" has been uploaded successfully in folder "${data.folder}"!`
+                        );
+                        clearForm();
+                        loadGallery();
+                    }, 500);
+                    
+                    showToast('✅ File uploaded successfully!', 'success');
+                } else {
+                    progressBar.style.width = '0%';
+                    uploadStatus.textContent = 'Upload failed! ❌';
+                    showModal('error', 
+                        'Upload Failed', 
+                        data.error || 'An error occurred during upload. Please try again.'
+                    );
+                    showToast('❌ ' + data.error, 'error');
+                }
+            } catch (err) {
+                clearInterval(progressInterval);
+                progressBar.style.width = '0%';
+                uploadStatus.textContent = 'Upload failed! ❌';
+                showModal('error', 
+                    'Connection Error', 
+                    'Failed to connect to server. Please check your internet connection and try again.'
+                );
+                showToast('❌ Upload failed. Please try again.', 'error');
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.innerHTML = '🚀 Upload File';
+            }
+        };
+        
+        function showToast(msg, type) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.className = 'toast show ' + type;
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+        
+        async function loadGallery() {
+            try {
+                const res = await fetch('/gallery');
+                const data = await res.json();
+                
+                allFiles = data.files;
+                
+                // Animate counter
+                animateCounter('totalFiles', data.stats.total_files);
+                animateCounter('totalFolders', data.stats.total_folders);
+                animateCounter('totalSystems', data.stats.total_systems);
+                
+                displayFiles(allFiles);
+            } catch (err) {
+                console.error('Gallery load error:', err);
+                document.getElementById('galleryGrid').innerHTML = '<p style="text-align: center; color: #999; grid-column: 1/-1;">Failed to load files. Please refresh the page.</p>';
+            }
+        }
+        
+        function animateCounter(id, target) {
+            const element = document.getElementById(id);
+            const current = parseInt(element.textContent) || 0;
+            
+            if (current === target) return;
+            
+            const increment = target > current ? Math.ceil((target - current) / 20) : -Math.ceil((current - target) / 20);
+            
+            const timer = setInterval(() => {
+                const newValue = parseInt(element.textContent) + increment;
+                if ((increment > 0 && newValue >= target) || (increment < 0 && newValue <= target)) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = newValue;
+                }
+            }, 50);
+        }
+        
+        function displayFiles(files) {
+            const grid = document.getElementById('galleryGrid');
+            
+            if (files.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: #999; grid-column: 1/-1;">No files yet! Upload your first file above 👆</p>';
+                return;
+            }
+            
+            grid.innerHTML = files.map((f, index) => `
+                <div class="gallery-item" style="animation-delay: ${index * 0.05}s">
+                    ${f.thumbnail && f.is_image ? 
+                        `<img src="/thumbnail/${escapeHtml(f.thumbnail)}" alt="${escapeHtml(f.name)}" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'gallery-item-icon\\'>${getFileIcon(f.name)}</div>';">` :
+                        `<div class="gallery-item-icon">${getFileIcon(f.name)}</div>`
+                    }
+                    <div class="gallery-item-info">
+                        <strong>📁 ${escapeHtml(f.folder)}</strong>
+                        <div class="info-line">📄 ${escapeHtml(f.name)}</div>
+                        <div class="info-line">📏 ${escapeHtml(f.file_size)}</div>
+                        <div class="info-line">📅 ${escapeHtml(f.date)}</div>
+                        <div class="info-line">💻 ${escapeHtml(f.uploaded_by)}</div>
+                        <div class="info-line">🌐 ${escapeHtml(f.system_ip)}</div>
+                        ${f.description ? `<div class="info-line">💬 ${escapeHtml(f.description)}</div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        document.getElementById('searchBox').oninput = (e) => {
+            const query = e.target.value.toLowerCase();
+            const filtered = allFiles.filter(f => 
+                f.name.toLowerCase().includes(query) ||
+                f.folder.toLowerCase().includes(query) ||
+                (f.description && f.description.toLowerCase().includes(query))
+            );
+            displayFiles(filtered);
+        };
+        
+        // Add confetti effect on successful upload
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4CAF50', '#667eea', '#ffd700', '#ff69b4'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.position = 'fixed';
+                    confetti.style.width = '10px';
+                    confetti.style.height = '10px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.left = Math.random() * window.innerWidth + 'px';
+                    confetti.style.top = '-10px';
+                    confetti.style.zIndex = '10000';
+                    confetti.style.borderRadius = '50%';
+                    confetti.style.pointerEvents = 'none';
+                    document.body.appendChild(confetti);
+                    
+                    const fallDuration = Math.random() * 3 + 2;
+                    const sway = Math.random() * 200 - 100;
+                    
+                    confetti.animate([
+                        { transform: 'translateY(0) translateX(0) rotate(0deg)', opacity: 1 },
+                        { transform: `translateY(${window.innerHeight + 10}px) translateX(${sway}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+                    ], {
+                        duration: fallDuration * 1000,
+                        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                    }).onfinish = () => confetti.remove();
+                }, i * 30);
+            }
+        }
+        
+        // Initial load
+        loadGallery();
+        
+        // Auto refresh every 30 seconds
+        setInterval(loadGallery, 30000);
+    </script>
+</body>
+</html>
